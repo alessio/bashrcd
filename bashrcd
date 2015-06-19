@@ -16,11 +16,14 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
+# Global const vars
 
 BASHRCD_DIR="${BASHRCD_DIR:-${HOME}/.bashrc.d}"
 
+# Global vars
+
 g_bashrcd_local_symbols=''
+g_cmd_run_parts=''
 
 
 f_bashrcd_register_local_symbol() {
@@ -61,8 +64,24 @@ f_bashrcd_process_scripts() {
 f_bashrcd_register_local_symbol f_bashrcd_process_scripts
 
 
+f_check_run_parts() {
+  g_cmd_run_parts="$(which run-parts 2>/dev/null)"
+  if [[ "$?" -ne 0 ]]; then
+    # Try with busybox
+    local l_cmd_busybox
+
+    l_cmd_busybox="$(which busybox 2>/dev/null)" || f_bashrcd_abort 2 "Unable to locate run-parts"
+    ${l_cmd_busybox} --list | grep -q run-parts 2>/dev/null || f_bashrcd_abort 2 "Unable to locate run-parts"
+    g_cmd_run_parts="${l_cmd_busybox} run-parts"
+  fi
+
+  [[ -n "${g_cmd_run_parts}" ]] || f_bashrcd_abort 2 "Unable to locate run-parts"
+}
+
+
 f_bashrcd_list_scripts() {
-  run-parts --list "${BASHRCD_DIR}"
+  f_check_run_parts
+  ${g_cmd_run_parts} --list "${BASHRCD_DIR}"
 }
 f_bashrcd_register_local_symbol f_bashrcd_list_scripts
 
