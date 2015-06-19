@@ -23,6 +23,18 @@ BASHRCD_DIR="${BASHRCD_DIR:-${HOME}/.bashrc.d}"
 g_bashrcd_local_symbols=''
 
 
+f_abort() {
+  local l_rc l_err
+
+  l_rc="$1"
+  l_err="$2"
+
+  [[ -z "${l_err}" ]] || printf "%s" "${l_err}\n" >&2
+
+  exit "${l_rc}"
+}
+
+
 f_bashrcd_register_local_symbol() {
   g_bashrcd_local_symbols="${g_bashrcd_local_symbols} $1"
 }
@@ -76,7 +88,7 @@ while getopts "hn" opt; do
   case "${opt}" in
     h)  f_bashrcd_help ; exit 0 ;;
     n)  f_bashrcd_list_scripts ; exit 0 ;;
-    \?) f_bashrcd_help ; exit 1 ;;
+    \?) f_bashrcd_help ; f_abort 1 ;;
   esac
 done
 
