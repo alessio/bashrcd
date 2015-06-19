@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# Copyright (C) 2015 Smartodds Ltd
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+
+
+BASHRCD_DIR="${BASHRCD_DIR:-${HOME}/.bashrc.d}"
+
+g_bashrcd_local_symbols=''
+
+
+f_bashrcd_register_local_symbol() {
+  g_bashrcd_local_symbols="${g_bashrcd_local_symbols} $1"
+}
+f_bashrcd_register_local_symbol f_bashrcd_register_local_symbol
+
+
+f_bashrcd_init_userdir() {
+  [[ -d "${BASHRCD_DIR}" ]] || mkdir -p "${BASHRCD_DIR}"
+}
+f_bashrcd_register_local_symbol f_bashrcd_init_userdir
+
+
+f_bashrcd_process_scripts() {
+  local \
+    l_script \
+    l_list
+
+  l_list="$@"
+  for l_script in ${l_list} ; do
+    . "${l_script}"
+  done
+}
+f_bashrcd_register_local_symbol f_bashrcd_process_scripts
+
+
+f_bashrcd_list_scripts() {
+  run-parts --list "${BASHRCD_DIR}"
+}
+f_bashrcd_register_local_symbol f_bashrcd_list_scripts
+
+
+f_bashrcd_help() {
+  cat >&2 <<EOF
+Usage: $(basename $0) [-hn]
+Execute scripts found in ${BASHRCD_DIR} in the current shell.
+
+  Options:
+   -h        Display this help and exit
+   -n        List the scripts as they would be executed,
+             without actually executing them.
+EOF
+}
+f_bashrcd_register_local_symbol f_bashrcd_help
+
+
+# main()
+
+f_bashrcd_init_userdir
+
+while getopts "hn" opt; do
+  case "${opt}" in
+    h)  f_bashrcd_help ; exit 0 ;;
+    n)  f_bashrcd_list_scripts ; exit 0 ;;
+    \?) f_bashrcd_help ; exit 1 ;;
+  esac
+done
+
+shift "$((OPTIND-1))"
+
+f_bashrcd_process_scripts $(f_bashrcd_list_scripts)
+
+
+unset ${g_bashrcd_local_symbols}
+unset g_bashrcd_local_symbols
