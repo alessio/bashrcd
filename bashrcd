@@ -79,6 +79,7 @@ f_bashrcd_check_run_parts() {
   [[ -n "${l_cmd_run_parts}" ]] || f_bashrcd_abort 2 "Unable to locate run-parts"
   printf "%s" "${l_cmd_run_parts}"
 }
+f_bashrcd_register_local_symbol f_bashrcd_check_run_parts
 
 
 f_bashrcd_list_scripts() {
