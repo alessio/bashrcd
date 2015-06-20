@@ -63,7 +63,7 @@ f_bashrcd_process_scripts() {
 f_bashrcd_register_local_symbol f_bashrcd_process_scripts
 
 
-f_check_run_parts() {
+f_bashrcd_check_run_parts() {
   local \
     l_cmd_busybox \
     l_cmd_run_parts
@@ -84,7 +84,7 @@ f_check_run_parts() {
 f_bashrcd_list_scripts() {
   local l_cmd_run_parts
 
-  l_cmd_run_parts="$(f_check_run_parts)"
+  l_cmd_run_parts="$(f_bashrcd_check_run_parts)"
   ${l_cmd_run_parts} --list "${BASHRCD_DIR}"
 }
 f_bashrcd_register_local_symbol f_bashrcd_list_scripts
