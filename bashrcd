@@ -95,13 +95,16 @@ f_bashrcd_register_local_symbol f_bashrcd_list_scripts
 f_bashrcd_help() {
   cat >&2 <<EOF
 Usage: $(basename $0) [-hn]
-Execute scripts found in ${BASHRCD_DIR} in the current shell.
+Execute scripts found in \$BASHRCD_DIR in the current shell.
 
   Options:
    -h        Display this help and exit
    -n        List the scripts as they would be executed,
              without actually executing them.
    -v        Output version information and exit.
+
+If \$BASHRCD_DIR is null or unset, its default value is
+\`\$HOME/.bashrc.d/'.
 EOF
 }
 f_bashrcd_register_local_symbol f_bashrcd_help
