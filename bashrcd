@@ -19,6 +19,7 @@
 # Global const vars
 
 BASHRCD_DIR="${BASHRCD_DIR:-${HOME}/.bashrc.d}"
+BASHRCD_VERSION='0.1.0'
 
 # Global vars
 
@@ -100,19 +101,35 @@ Execute scripts found in ${BASHRCD_DIR} in the current shell.
    -h        Display this help and exit
    -n        List the scripts as they would be executed,
              without actually executing them.
+   -v        Output version information and exit.
 EOF
 }
 f_bashrcd_register_local_symbol f_bashrcd_help
+
+
+f_bashrcd_version() {
+  cat >&2 <<EOF
+$(basename $0) ${BASHRCD_VERSION}
+Copyright (C) 2015 Smartodds Ltd
+License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Alessio Treglia.
+EOF
+}
+f_bashrcd_register_local_symbol f_bashrcd_version
 
 
 # main()
 
 f_bashrcd_init_userdir
 
-while getopts "hn" opt; do
+while getopts "hnv" opt; do
   case "${opt}" in
     h)  f_bashrcd_help ; exit 0 ;;
     n)  f_bashrcd_list_scripts ; exit 0 ;;
+    v)  f_bashrcd_version ; exit 0 ;;
     \?) f_bashrcd_help ; f_bashrcd_abort 1 ;;
   esac
 done
