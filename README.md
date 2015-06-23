@@ -11,7 +11,7 @@ Just type:
 
 Add a line to load the script automatically at Bash startup:
 ```shell
-$ echo '. bashrcd' >> ~/.bashrc
+$ grep -q bashrcd ~/.bashrc || echo '. bashrcd' >> ~/.bashrc
 ```
 
 You can now open a new terminal and start populating _~/.bashrc.d/_ with your startup scripts.
