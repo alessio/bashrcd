@@ -9,13 +9,12 @@ Just type:
 # make install
 ```
 
-Create a subdirectory _.bashrc.d_ in your _$HOME_ and add a line to load the script automatically at Bash startup:
+Add a line to load the script automatically at Bash startup:
 ```shell
-mkdir ~/.bashrc.d
-$ echo '. bashrcd'
+$ echo '. bashrcd' >> ~/.bashrc
 ```
 
-You can now start populating your _~/.bashrc.d/_ with startup scripts.
+You can now open a new terminal and start populating _~/.bashrc.d/_ with your startup scripts.
 
 # Execution order
 
