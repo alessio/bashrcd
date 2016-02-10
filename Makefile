@@ -10,4 +10,9 @@ install: bashrcd
 clean:
 	rm -f *~
 
-.PHONY: install clean
+test:
+	/bin/bash tests/test_*.sh
+	@echo
+	/usr/bin/shellcheck bashrcd
+
+.PHONY: install clean test
