@@ -1,0 +1,5 @@
+sudo: required
+dist: trusty
+language: bash
+before_script: tests/install-shellcheck.sh
+script: make test
