@@ -59,6 +59,7 @@ f_bashrcd_process_scripts() {
   # shellcheck disable=SC2124
   l_list="$@"
   for l_script in ${l_list} ; do
+    # shellcheck disable=SC1090
     . "${l_script}"
   done
 }
