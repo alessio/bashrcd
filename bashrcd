@@ -129,6 +129,7 @@ EOF
 f_bashrcd_register_local_symbol f_bashrcd_version
 
 
+# shellcheck disable=SC2086
 f_bashrcd_fatal_invalid_option() {
   cat >&2 <<EOF
 $(basename $0): unrecognised option -- '$1'
@@ -138,6 +139,7 @@ EOF
 f_bashrcd_register_local_symbol f_bashrcd_fatal_invalid_option
 
 
+# shellcheck disable=SC2086
 f_bashrcd_fatal_arg_not_found() {
   cat >&2 <<EOF
 $(basename $0): option requires an argument -- '$1'
@@ -151,6 +153,7 @@ f_bashrcd_register_local_symbol f_bashrcd_fatal_arg_not_found
 
 f_bashrcd_init_userdir
 
+# shellcheck disable=SC1001
 while getopts ":d:hnv" opt; do
   case "${opt}" in
     d)  BASHRCD_DIR="${OPTARG}" ;;
