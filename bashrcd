@@ -101,6 +101,7 @@ Usage: $(basename $0) [-hn]
 Execute scripts found in \$BASHRCD_DIR in the current shell.
 
   Options:
+   -d        Override BASHRCD_DIR
    -h        Display this help and exit
    -n        List the scripts as they would be executed,
              without actually executing them.
@@ -128,16 +129,36 @@ EOF
 f_bashrcd_register_local_symbol f_bashrcd_version
 
 
+f_bashrcd_fatal_invalid_option() {
+  cat >&2 <<EOF
+$(basename $0): unrecognised option -- '$1'
+Try '$(basename $0) -h' for more information.
+EOF
+}
+f_bashrcd_register_local_symbol f_bashrcd_fatal_invalid_option
+
+
+f_bashrcd_fatal_arg_not_found() {
+  cat >&2 <<EOF
+$(basename $0): option requires an argument -- '$1'
+Try '$(basename $0) -h' for more information.
+EOF
+}
+f_bashrcd_register_local_symbol f_bashrcd_fatal_arg_not_found
+
+
 # main()
 
 f_bashrcd_init_userdir
 
-while getopts "hnv" opt; do
+while getopts ":d:hnv" opt; do
   case "${opt}" in
+    d)  BASHRCD_DIR="${OPTARG}" ;;
     h)  f_bashrcd_help ; exit 0 ;;
     n)  f_bashrcd_list_scripts ; exit 0 ;;
     v)  f_bashrcd_version ; exit 0 ;;
-    \?) f_bashrcd_help ; f_bashrcd_abort 1 ;;
+    \:) f_bashrcd_fatal_arg_not_found "${OPTARG}" ; f_bashrcd_abort 1 ;;
+    \?) f_bashrcd_fatal_invalid_option "${OPTARG}" ; f_bashrcd_abort 1 ;;
   esac
 done
 
