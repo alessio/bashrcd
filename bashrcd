@@ -20,7 +20,7 @@
 # Global const vars
 
 BASHRCD_DIR="${BASHRCD_DIR:-${HOME}/.bashrc.d}"
-BASHRCD_VERSION='0.1.0'
+BASHRCD_VERSION='0.1.1'
 
 # Global vars
 
