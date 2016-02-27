@@ -11,7 +11,8 @@ clean:
 	rm -f *~
 
 test:
-	/bin/bash tests/test_*.sh
+	@/bin/bash tests/test_envvars.sh
+	@/bin/bash tests/test_override_bashrcd.sh
 	@echo
 	/usr/bin/shellcheck bashrcd
 
