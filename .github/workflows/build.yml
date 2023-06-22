@@ -13,8 +13,11 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - name: Run tests
-      - run: make test
+      - name: Run test_envvars
+      - run: bash tests/test_envvars.sh
+      - name: Run test_override_bashrcd
+      - run: bash tests/test_override_bashrcd.sh
+
   shellcheck:
     name: shellcheck
     runs-on: ubuntu-latest
