@@ -1,4 +1,4 @@
-# bashrcd [![Travis-CI Status](https://api.travis-ci.org/alessio/bashrcd.png?branch=master)](http://travis-ci.org/#!/alessio/bashrcd)
+# bashrcd
 
 Manage Bash's user configuration modules.
 
