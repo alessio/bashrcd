@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 PREFIX ?= /usr/local
+SHELLCHECK := $(which shellcheck)
 
 all: install
 
@@ -11,9 +12,10 @@ clean:
 	rm -f *~
 
 test:
-	@/bin/bash tests/test_envvars.sh
-	@/bin/bash tests/test_override_bashrcd.sh
+	/bin/bash tests/test_envvars.sh
 	@echo
-	/usr/bin/shellcheck bashrcd
+	/bin/bash tests/test_override_bashrcd.sh
+	@echo
+	$(SHELLCHECK) bashrcd
 
 .PHONY: install clean test
