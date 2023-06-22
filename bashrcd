@@ -26,6 +26,7 @@ BASHRCD_VERSION='0.1.1'
 
 g_bashrcd_local_symbols=''
 
+trap 'echo "aborted (rc = $?)" >&2' EXIT
 
 f_bashrcd_register_local_symbol() {
   g_bashrcd_local_symbols="${g_bashrcd_local_symbols} $1"
@@ -39,7 +40,7 @@ f_bashrcd_abort() {
   l_rc="$1"
   l_err="$2"
 
-  [[ -z "${l_err}" ]] || printf "%s" "${l_err}\n" >&2
+  [[ -z "${l_err}" ]] || printf "%s\n" "${l_err}" >&2
 
   exit "${l_rc}"
 }
@@ -81,6 +82,7 @@ f_bashrcd_check_run_parts() {
   l_cmd_busybox="$(which busybox 2>/dev/null)"
   l_rc="$?"
   if [ "${l_rc}" -eq 0 ]; then
+    l_rc=''
     ${l_cmd_busybox} --list | grep -q run-parts 2>/dev/null
     l_rc="$?"
     [ "${l_rc}" -eq 0 ] && printf "%s" "${l_cmd_busybox} run-parts" && return 0
@@ -91,7 +93,7 @@ f_bashrcd_check_run_parts() {
   l_rc="$?"
   [ "${l_rc}" -eq 0 ] && printf "%s" "${l_cmd_run_parts}" && return 0
 
-  f_bashrcd_abort 2 "Unable to locate run-parts"
+  f_bashrcd_abort 10 "f_bashrcd_check_run_parts: coudln't find run-parts"
 }
 f_bashrcd_register_local_symbol f_bashrcd_check_run_parts
 
@@ -162,6 +164,9 @@ f_bashrcd_register_local_symbol f_bashrcd_fatal_arg_not_found
 
 # main()
 
+# This program can't run without run-parts or a compatible implementation
+f_bashrcd_check_run_parts
+
 f_bashrcd_init_userdir
 
 # shellcheck disable=SC1001
@@ -172,7 +177,7 @@ while getopts ":d:hnv" opt; do
     n)  f_bashrcd_list_scripts ; exit 0 ;;
     v)  f_bashrcd_version ; exit 0 ;;
     \:) f_bashrcd_fatal_arg_not_found "${OPTARG}" ; f_bashrcd_abort 1 ;;
-    \?) f_bashrcd_fatal_invalid_option "${OPTARG}" ; f_bashrcd_abort 1 ;;
+    \?) f_bashrcd_fatal_invalid_option "${OPTARG}" ; f_bashrcd_abort 2 ;;
   esac
 done
 
