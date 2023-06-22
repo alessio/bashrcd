@@ -1,22 +1,16 @@
-name: GitHub Actions Demo
+name: Build and test bashrcd
 run-name: ${{ github.actor }} is testing bashrcd
 on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "triggered by ${{ github.event_name }}"
-      - run: echo "running ${{ runner.os }}"
-      - run: echo "repo: ${{ github.repository }} commit: ${{ github.ref }}"
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: List files in the repository
         run: |
-          ls ${{ github.workspace }}
-      - name: Run test_envvars
-      - run: bash tests/test_envvars.sh
-      - name: Run test_override_bashrcd
-      - run: bash tests/test_override_bashrcd.sh
+          bash tests/test_envvars.sh
+          bash tests/test_override_bashrcd.sh
 
   shellcheck:
     name: shellcheck
@@ -24,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: run shellcheck
-        uses: ludeeus/action-shellcheck@master`
+        uses: ludeeus/action-shellcheck@master
         with:
           severity: error
           ignore_paths: ./tests/*
