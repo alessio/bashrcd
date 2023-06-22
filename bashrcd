@@ -70,18 +70,28 @@ f_bashrcd_register_local_symbol f_bashrcd_process_scripts
 f_bashrcd_check_run_parts() {
   local \
     l_cmd_busybox \
-    l_cmd_run_parts
+    l_cmd_run_parts \
+    l_rc
 
   l_cmd_run_parts="$(which run-parts 2>/dev/null)"
-  if [[ "$?" -ne 0 ]]; then
-    # Try with busybox
-    l_cmd_busybox="$(which busybox 2>/dev/null)" || f_bashrcd_abort 2 "Unable to locate run-parts"
-    ${l_cmd_busybox} --list | grep -q run-parts 2>/dev/null || f_bashrcd_abort 2 "Unable to locate run-parts"
-    l_cmd_run_parts="${l_cmd_busybox} run-parts"
+  l_rc="$?"
+  [ "${l_rc}" -eq 0 ] && printf "%s" "${l_cmd_run_parts}" && return 0
+
+  l_cmd_run_parts=''
+  l_cmd_busybox="$(which busybox 2>/dev/null)"
+  l_rc="$?"
+  if [ "${l_rc}" -eq 0 ]; then
+    ${l_cmd_busybox} --list | grep -q run-parts 2>/dev/null
+    l_rc="$?"
+    [ "${l_rc}" -eq 0 ] && printf "%s" "${l_cmd_busybox} run-parts" && return 0
   fi
 
-  [[ -n "${l_cmd_run_parts}" ]] || f_bashrcd_abort 2 "Unable to locate run-parts"
-  printf "%s" "${l_cmd_run_parts}"
+  # Try the go runparts
+  l_cmd_run_parts="$(which runparts 2>/dev/null)"
+  l_rc="$?"
+  [ "${l_rc}" -eq 0 ] && printf "%s" "${l_cmd_run_parts}" && return 0
+
+  f_bashrcd_abort 2 "Unable to locate run-parts"
 }
 f_bashrcd_register_local_symbol f_bashrcd_check_run_parts
 
@@ -98,7 +108,7 @@ f_bashrcd_register_local_symbol f_bashrcd_list_scripts
 # shellcheck disable=SC2086
 f_bashrcd_help() {
   cat >&2 <<EOF
-Usage: $(basename $0) [-hn]
+Usage: $(basename $0) [-dhnv]
 Execute scripts found in \$BASHRCD_DIR in the current shell.
 
   Options:
