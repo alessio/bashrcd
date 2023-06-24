@@ -26,8 +26,6 @@ BASHRCD_VERSION='0.1.1'
 
 g_bashrcd_local_symbols=''
 
-trap 'echo "aborted (rc = $?)" >&2' EXIT
-
 f_bashrcd_register_local_symbol() {
   g_bashrcd_local_symbols="${g_bashrcd_local_symbols} $1"
 }
