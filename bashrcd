@@ -99,7 +99,7 @@ f_bashrcd_register_local_symbol f_bashrcd_check_run_parts
 f_bashrcd_list_scripts() {
   local l_cmd_run_parts
 
-  l_cmd_run_parts="$(f_bashrcd_check_run_parts)"
+  l_cmd_run_parts="$(f_bashrcd_check_run_parts 2>/dev/null)"
   ${l_cmd_run_parts} --list "${BASHRCD_DIR}"
 }
 f_bashrcd_register_local_symbol f_bashrcd_list_scripts
@@ -163,7 +163,7 @@ f_bashrcd_register_local_symbol f_bashrcd_fatal_arg_not_found
 # main()
 
 # This program can't run without run-parts or a compatible implementation
-f_bashrcd_check_run_parts
+f_bashrcd_check_run_parts &>/dev/null
 
 f_bashrcd_init_userdir
 
