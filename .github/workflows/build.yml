@@ -1,4 +1,7 @@
 name: Build and test bashrcd
+permissions:
+  contents: read
+  pull-requests: write
 run-name: ${{ github.actor }} is testing bashrcd
 on: [push]
 jobs:
